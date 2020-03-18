@@ -1,0 +1,397 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+typedef struct person  //定义结构体
+{
+    char id[14];
+    char name[20];
+    char sex[4];
+    char academy[20];
+    char phone[12];
+    char address[25];
+    char school[5];
+    char native[5];
+    char touch[5];
+    char infected[5];
+    char date[12];
+} person;
+int num=0;
+person per[200];
+
+void menu_select();
+void add();
+void scan();
+void query();
+void statis();
+
+void menu_select()  //菜单选择系统函数
+{
+    printf("\n\n");
+    printf("\t\t --------西北师大疫情调查系统-------- \n");
+    printf("\t\t 1. 添加记录 \n");
+    printf("\t\t 2. 显示记录 \n");
+    printf("\t\t 3. 查询记录 \n");
+    printf("\t\t 4. 按日统计 \n");
+    printf("\t\t 0. 退出程序 \n");
+}
+
+void add()  //添加疫情信息
+{
+    FILE *fp;
+    int i=0;
+    char sign='y';   //定义sign='y'
+    person p[200] ;
+    while(sign!='n'&&sign!='N')   //只有当输入N或n时才跳出循环
+    {
+        printf("\n请输入您的ID：");
+        scanf("%s",per[i].id);
+        printf("\n请输入您的姓名：");
+        scanf("%s",per[i].name);
+        //判断性别是否输入正确
+        while(1)
+        {
+            printf("\n请输入您的性别:");
+            scanf("%s",per[i].sex);
+            if(strcmp(per[i].sex,"男")==0||strcmp(per[i].sex,"女")==0)
+            {
+                break;
+            }
+            else
+            {
+                printf("输入有误！");
+            }
+        }
+        printf("\n请输入您所在院系：");
+        scanf("%s",per[i].academy);
+        int len=0;
+        //判断电话号码是否输入正确，默认为11位
+        while(1)
+        {
+            printf("\n请输入您的电话号码：");
+            scanf("%s",per[i].phone);
+            len=strlen(per[i].phone);
+            if(len==11)
+            {
+                break;
+            }
+            else
+            {
+                printf("输入有误,请重新输入！");
+            }
+        }
+        printf("\n请问您当前所在地址：");
+        scanf("%s",per[i].address);
+        while(1)
+        {
+            printf("\n请问您是否留校(是/否)：");
+            scanf("%s",per[i].school);
+            if(strcmp(per[i].school,"是")==0||strcmp(per[i].school,"否")==0)
+            {
+                break;
+            }
+            else
+            {
+                printf("输入有误！");
+            }
+        }
+        while(1)
+        {
+            printf("\n请问您是否为湖北籍人员（是/否）：");
+            scanf("%s",per[i].native);
+            if(strcmp(per[i].native,"是")==0||strcmp(per[i].native,"否")==0)
+            {
+                break;
+            }
+            else
+            {
+                printf("输入有误！");
+            }
+        }
+        while(1)
+        {
+            printf("\n请问您是否近14日内与湖北疫区人员接触（是/否）：");
+            scanf("%s",per[i].touch);
+            if(strcmp(per[i].touch,"是")==0||strcmp(per[i].touch,"否")==0)
+            {
+                break;
+            }
+            else
+            {
+                printf("输入有误！");
+            }
+        }
+        while(1)
+        {
+            printf("\n请问您是否有被感染现象(是/否)：");
+            scanf("%s",per[i].infected);
+            if(strcmp(per[i].infected,"是")==0||strcmp(per[i].infected,"否")==0)
+            {
+                break;
+            }
+            else
+            {
+                printf("输入有误！");
+            }
+        }
+        printf("\n请输入日期：");
+        scanf("%s",per[i].date);
+        printf("信息成功录入系统！\n");
+        i++;
+        num=num+1;
+        printf("是否继续添加?(y/n)");
+        scanf("\t%c",&sign);
+    }
+    if((fp=fopen("data.txt","ab"))==NULL)                    //以二进制形式在文件尾部追加保存//
+    {
+        printf("cannot open the files\n");
+        return;                                         //如果文件出现错误 就返回
+    }
+    for(i=0; i<num; i++)
+    {
+        fprintf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+                per[i].id,per[i].name,per[i].sex,per[i].academy,
+                per[i].phone,per[i].address,per[i].school,
+                per[i].native,per[i].touch,per[i].infected,per[i].date);
+    }
+    fclose(fp);//关闭文件
+}
+
+void scan()   //显示信息
+{
+    int i=0,n=0;
+    printf("学号\t姓名\t性别\t院系\t电话\t地址\t留校\t湖北籍\t接触疫区人员\t感染\t日期\n");
+    FILE *fp;
+    fp=fopen("data.txt","r");
+    if(fp==NULL)
+    {
+        printf("cannot open the files\n");
+    }
+    else
+    {
+        while(!feof(fp))
+        {
+            fscanf(fp,"%s %s %s %s %s %s %s %s %s %s %s",
+                   per[i].id,per[i].name,per[i].sex,per[i].academy,
+                   per[i].phone,per[i].address,per[i].school,
+                   per[i].native,per[i].touch,per[i].infected,per[i].date);
+            printf("%s\t",per[i].id);
+            printf("%s\t",per[i].name);
+            printf("%s\t",per[i].sex);
+            printf("%s\t",per[i].academy);
+            printf("%s\t",per[i].phone);
+            printf("%s\t",per[i].address);
+            printf("%s\t",per[i].school);
+            printf("%s\t",per[i].native);
+            printf("%s\t",per[i].touch);
+            printf("%s\t",per[i].infected);
+            printf("%s\n",per[i].date);
+        }
+        fclose(fp);
+    }
+}
+
+//信息查询//
+void query()
+{
+    person p[200];
+    FILE *fp;
+    int i=0;
+    int n=0;
+    int m;
+    //可按不同方式查询信息
+    printf("\t\n请选择查询方式:\n");
+    printf("\t1------姓名 \n");
+    printf("\t2------学号 \n");
+    printf("\t3------日期\n");
+    printf("请输入你要查询的方式\n");
+    scanf("%d",&m);
+    while(m!=1&&m!=2&&m!=3)
+    {
+        printf("输入错误请重新查询！\n");
+        scanf("%d",&m);
+    }
+    if((fp=fopen("data.txt","r"))==NULL)
+    {
+        printf("cannot open the files\n");
+    }
+    while(fscanf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+                 per[i].id,per[i].name,per[i].sex,per[i].academy,
+                 per[i].phone,per[i].address,per[i].school,per[i].native,
+                 per[i].touch,per[i].infected,per[i].date)!=EOF);
+    {
+        i++;
+        n=n+1;
+    }
+    if(m==1)     //姓名查询
+    {
+        char s[20];
+        int i=0;
+        printf("\t请输入想查询的姓名:");
+        scanf("\t%s",s);
+        while(strcmp(per[i].name,s)!=0&&i<n)  //比较per[i].name与所输入姓名是否相同//
+        {
+            i++;
+        }
+        if(i==n)
+        {
+            printf("查找失败！");
+        }
+        else
+        {
+            printf("学号\t姓名\t性别\t所在院系\t电话\t地址\t留校\t湖北籍\t接触疫区人员\t感染\t日期\n");
+            printf("%s\t",per[i].id);
+            printf("%s\t",per[i].name);
+            printf("%s\t",per[i].sex);
+            printf("%s\t",per[i].academy);
+            printf("%s\t",per[i].phone);
+            printf("%s\t",per[i].address);
+            printf("%s\t",per[i].school);
+            printf("%s\t",per[i].native);
+            printf("%s\t",per[i].touch);
+            printf("%s\t",per[i].infected);
+            printf("%s\n",per[i].date);
+        }
+    }
+    if(m==2)   //学号查询
+    {
+        char s[15];
+        int i=0;
+        printf("\t请输入想查询的学号：");
+        scanf("\t%s",s);
+        while(strcmp(per[i].id,s)!=0&&i<n)   //比较per[i].id与所输入学号是否相同//
+        {
+            i++;
+        }
+        if(i==n)
+        {
+            printf("\t查找失败!\n");
+        }
+        else
+        {
+            printf("学号\t姓名\t性别\t院系\t电话\t地址\t留校\t湖北籍\t接触疫区人员\t感染\t日期\n");
+            printf("%s\t",per[i].id);
+            printf("%s\t",per[i].name);
+            printf("%s\t",per[i].sex);
+            printf("%s\t",per[i].academy);
+            printf("%s\t",per[i].phone);
+            printf("%s\t",per[i].address);
+            printf("%s\t",per[i].school);
+            printf("%s\t",per[i].native);
+            printf("%s\t",per[i].touch);
+            printf("%s\t",per[i].infected);
+            printf("%s\n",per[i].date);
+        }
+    }
+    if(m==3)    //日期查询
+    {
+        char s[12];
+        int i=0;
+        printf("\t请输入想查询的日期:");
+        scanf("\t%s",s);
+        while(strcmp(per[i].date,s)!=0&&i<n)//比较per[i].date与所输入日期是否相同
+        {
+            i++;
+        }
+        if(i==n)
+        {
+            printf("这天没有记录！");
+        }
+        else
+        {
+            printf("学号\t姓名\t性别\t院系\t电话\t地址\t留校\t湖北籍\t接触疫区人员\t感染\t日期\n");
+            printf("%s\t",per[i].id);
+            printf("%s\t",per[i].name);
+            printf("%s\t",per[i].sex);
+            printf("%s\t",per[i].academy);
+            printf("%s\t",per[i].phone);
+            printf("%s\t",per[i].address);
+            printf("%s\t",per[i].school);
+            printf("%s\t",per[i].native);
+            printf("%s\t",per[i].touch);
+            printf("%s\t",per[i].infected);
+            printf("%s\n",per[i].date);
+        }
+    }
+    fclose(fp);
+}
+
+//按日统计
+void statis()
+{
+    person p[200];
+    FILE *fp;
+    int m=0,i=0,n=0;
+    if((fp=fopen("data.txt","r"))==NULL)
+    {
+        printf("cannot open the files\n");
+        return;
+    }
+    while(fscanf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+                 per[i].id,per[i].name,per[i].sex,per[i].academy,
+                 per[i].phone,per[i].address,per[i].school,per[i].native，
+                 per[i].touch,per[i].infected,per[i].date)!=EOF);
+    {
+        i++;
+        n=n+1;
+    }
+    char s[12];
+    printf("\t请输入要统计的日期:");
+    scanf("\t%s",s);
+    i=0;
+    while(strcmp(per[i].date,s)!=0&&i<n)//比较per[i].date与所输入日期是否相同//
+    {
+        i++;
+    }
+    if(i==n)
+    {
+        printf("这天没有记录");
+    }
+    else
+    {
+        if(strcmp(per[i].infected,"是")==0)
+            m=m+1;
+        i=i++;
+        printf("这天有%d人感染！\n",m);
+    }
+    fclose(fp);
+}
+int main()
+{
+    char r=' ';
+    menu_select();
+    do //循环
+    {
+        printf("请输入选项（0~4）:\n");
+        //清除缓冲区的内容
+        fflush(stdin);
+        scanf("%c",&r);
+        fflush(stdin);
+        if(r>='0'&&r<='4')
+        {
+            switch(r)
+            {
+            case '1':
+                add();//调用添加信息的函数
+                printf("\n");
+                break;
+            case '2':
+                scan();//调用显示信息的函数
+                printf("\n");
+                break;
+            case '3':
+                query();//调用查询信息的函数
+                printf("\n");
+                break;
+            case '4':
+                statis();//调用按日期查找的函数
+                printf("\n");
+                break;
+            default:
+                printf("再见！\n");
+            }
+        }
+        else
+            printf("输入有误！\n");
+    }
+    while(r!='0');
+}
